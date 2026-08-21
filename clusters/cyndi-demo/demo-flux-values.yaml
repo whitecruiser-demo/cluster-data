@@ -130,9 +130,9 @@ spec:
             password: ''
             username: admin
       enabled: false
-      live_migration: true
+      live_migration: false
       metrics:
-        enabled: true
+        enabled: false
     kured:
       customValues: { }
       enabled: false
@@ -151,7 +151,7 @@ spec:
       enabled: true
     monitoring:
       customValues: { }
-      enabled: true
+      enabled: false
       thanos:
         objectStorage:
           accessKey: <changeme>
