@@ -16,13 +16,6 @@ spec:
   targetNamespace: cyndi-demo
   values:
     baremetalDefaults:
-      image:
-        name: ubuntu-22.04.5-live-server-amd64-deps.iso
-      kernel:
-        version: 6.5.0-35-generic
-      operatorOptions:
-        forceReinstallOS: false
-        skipDiffChecker: false
       users:
         - authorized_keys: [ ]
           name: 'whitestack'
@@ -35,23 +28,6 @@ spec:
       agentEnvVars: [ ]
       annotations: { }
       enabledCIS: false
-      etcd:
-        backup:
-          disableAutomaticSnapshots: true
-        exposeMetrics: false
-        extraArgs: [ ]
-      kubeComponents:
-        kubeApiServer:
-          extraArgs: [ ]
-        kubeControllerManager:
-          extraArgs: [ ]
-        kubeProxy:
-          extraArgs: [ ]
-        kubeScheduler:
-          extraArgs: [ ]
-        kubelet:
-          extraArgs: [ ]
-        labelSpecificConfigs: [ ]
       labels: { }
       name: 'cluster-test'
     cniConfig:
@@ -70,16 +46,6 @@ spec:
       tunnelProtocol: IPIP
     controlPlaneNodes:
       annotations: { }
-      baremetal:
-        defaults:
-          bmc:
-            credentialsSecret:
-              name: ''
-              namespace: ''
-            provider: ''
-          finalCommands: ''
-          storage: [ ]
-        nodes: [ ]
       isWorker: true
       labels: { }
       openstack:
@@ -93,19 +59,9 @@ spec:
         userDataFile: ''
       taints: [ ]
     descheduler:
-      customValues: { }
       enabled: false
-      lowNodeUtilization:
-        enabled: false
-        targetThresholds:
-          cpu: 60
-          memory: 60
-        thresholds:
-          cpu: 20
-          memory: 20
     etcdDefrag:
-      customValues: { }
-      enabled: true
+      enabled: false
     ingressNginx:
       customValues: { }
       enabled: true
@@ -116,19 +72,6 @@ spec:
         customValues: { }
         enabled: true
       customValues: { }
-      dashboard:
-        customValues: { }
-        enabled: true
-        ingress:
-          enabled: false
-          host: <changeme>
-          tls:
-            enabled: false
-            secretName: ''
-        proxy:
-          localAuthentication:
-            password: ''
-            username: admin
       enabled: false
       live_migration: false
       metrics:
@@ -221,59 +164,19 @@ spec:
     registries:
       enabled: false
     sdnController:
-      customValues: { }
       enabled: false
-      whitesdnSecrets:
-        password: kcatsetiw
     selfNodeRemediation:
       enabled: false
     sriovOperator:
       customValues: { }
       enabled: false
     storage:
-      cephFS:
-        clusterID: aaaaaaaa-bbbb-1111-2222-33333ccccccc
-        customValues: { }
-        enabled: false
-        enabledHostNetwork: false
-        fsName: ''
-        monitorList: [ ]
-        pool: volumes
-        provisionerReplicaCount: 3
-        reclaimPolicy: Retain
-        userID: admin
-        userKey: AAAAAAAAAAAAAAAAAA/BBBBBBBBBBBBBBBBBBB==
-      cephRBD:
-        clusterID: aaaaaaaa-bbbb-1111-2222-33333ccccccc
-        customValues: { }
-        enabled: false
-        enabledHostNetwork: false
-        monitorList: [ ]
-        pool: volumes
-        provisionerReplicaCount: 3
-        reclaimPolicy: Retain
-        userID: admin
-        userKey: AAAAAAAAAAAAAAAAAA/BBBBBBBBBBBBBBBBBBB==
       longhorn:
         customValues: { }
         enabled: true
         replicas: '2'
-      openebs:
-        customValues: { }
-        enabled: false
-        replicas: '2'
     workerNodes:
       annotations: { }
-      baremetal:
-        defaults:
-          bmc:
-            credentialsSecret:
-              name: ''
-              namespace: ''
-            provider: ''
-          finalCommands: ''
-          storage: [ ]
-        nodes: [ ]
       labels: { }
       openstack:
         availabilityZone: 'nova'
