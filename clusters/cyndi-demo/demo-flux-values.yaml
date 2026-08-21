@@ -151,7 +151,7 @@ spec:
       enabled: true
     monitoring:
       customValues: { }
-      enabled: false
+      enabled: true
       thanos:
         objectStorage:
           accessKey: <changeme>
