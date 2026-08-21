@@ -15,14 +15,178 @@ spec:
         namespace: flux-system
   targetNamespace: cluster-template
   values:
+    baremetalDefaults:
+      image:
+        name: ubuntu-22.04.5-live-server-amd64-deps.iso
+      kernel:
+        version: 6.5.0-35-generic
+      operatorOptions:
+        forceReinstallOS: false
+        skipDiffChecker: false
+      users:
+        - authorized_keys: [ ]
+          name: 'whitestack'
+          password: 'whitestack'
+    certManager:
+      customValues: { }
+      enabled: false
     cluster:
-      name: "cluster-template-userpe11"
-      addonsRepoName: "whitecruiser-apps"
+      addonsRepoName: whitecruiser-apps
+      agentEnvVars: [ ]
+      annotations: { }
+      enabledCIS: false
+      etcd:
+        backup:
+          disableAutomaticSnapshots: true
+        exposeMetrics: false
+        extraArgs: [ ]
+      kubeComponents:
+        kubeApiServer:
+          extraArgs: [ ]
+        kubeControllerManager:
+          extraArgs: [ ]
+        kubeProxy:
+          extraArgs: [ ]
+        kubeScheduler:
+          extraArgs: [ ]
+        kubelet:
+          extraArgs: [ ]
+        labelSpecificConfigs: [ ]
+      labels: { }
+      name: 'cluster-template-userpe11'
+    cniConfig:
+      additionalConfig: { }
+      bgp: true
+      internalAddressInterface: ''
+      masquerade: true
+      mtu: 1440
+      multusCustomValues: { }
+      multusEnabled: false
+      nodeAddressAutodetection:
+        method: kubernetes
+        value: ''
+      podCIDR: 10.42.0.0/16
+      serviceCIDR: 10.43.0.0/16
+      tunnelProtocol: IPIP
+    controlPlaneNodes:
+      annotations: { }
+      baremetal:
+        defaults:
+          bmc:
+            credentialsSecret:
+              name: ''
+              namespace: ''
+            provider: ''
+          finalCommands: ''
+          storage: [ ]
+        nodes: [ ]
+      isWorker: true
+      labels: { }
+      openstack:
+        availabilityZone: 'nova'
+        enabled: true
+        flavorName: 'm1.large'
+        imageName: 'Ubuntu_22_RKE2_k-6.8.0-51'
+        quantity: 1
+        rootVolume: { }
+        securityGroups: sec-curso
+        userDataFile: ''
+      taints: [ ]
+    descheduler:
+      customValues: { }
+      enabled: false
+      lowNodeUtilization:
+        enabled: false
+        targetThresholds:
+          cpu: 60
+          memory: 60
+        thresholds:
+          cpu: 20
+          memory: 20
+    etcdDefrag:
+      customValues: { }
+      enabled: true
+    ingressNginx:
+      customValues: { }
+      enabled: true
+    kubemacpool:
+      enabled: false
+    kubevirt:
+      cdi:
+        customValues: { }
+        enabled: true
+      customValues: { }
+      dashboard:
+        customValues: { }
+        enabled: true
+        ingress:
+          enabled: false
+          host: <changeme>
+          tls:
+            enabled: false
+            secretName: ''
+        proxy:
+          localAuthentication:
+            password: ''
+            username: admin
+      enabled: false
+      live_migration: false
+      metrics:
+        enabled: false
+    kured:
+      customValues: { }
+      enabled: false
+    logging:
+      clusterOutputs:
+        server:
+          host: <changeme>
+          port: 24224
+      customValues: { }
+      enabled: false
+    macvtapCni:
+      deviceConfig: [ ]
+      enabled: false
+    metallb:
+      customValues: { }
+      enabled: true
+    monitoring:
+      customValues: { }
+      enabled: false
+      thanos:
+        objectStorage:
+          accessKey: <changeme>
+          bucket: <changeme>
+          endpoint: <changeme:changeme>
+          secretKey: <changeme>
+      thanosIngress:
+        host: <changeme>
+    nmstateOperator:
+      enabled: false
+    nodeConfigOperator:
+      customValues: { }
+      enabled: false
+      managerConfig:
+        aptEnabled: true
+        hostfsEnabled: true
+    nodeHealthcheckOperator:
+      enabled: false
+    ntp:
+      customValues: { }
+      enabled: false
     openstackDefaults:
-      authUrl: "http://10.102.0.19:5000"
-      domainName: "Default"
-      keypairName: "curso-wcruiser"
-      privateKeyFile: |-
+      authUrl: 'http://10.102.0.19:5000'
+      caCerts:
+        configMap:
+          name: ''
+          namespace: ''
+      domainName: Default
+      keypairName: 'curso-wcruiser'
+      netName: 'PUBLIC'
+      password:
+        secret:
+          name: 'openstack-password-cyndi'
+          namespace: 'default'
+      privateKeyFile: |
         -----BEGIN RSA PRIVATE KEY-----
         MIIEpAIBAAKCAQEA2XuFE6LaMMXBJK4b+BgGgb1VYiQH293MGMtaV1npy+DVmrq2
         XGcZlF2zsNyTRGyTXOoEoxKOQOnL7O5h4qkxtAJMxzLFTkAf5rtW3wi6c/UocaKM
@@ -50,87 +214,77 @@ spec:
         +QAeEwDx3jrwHDkoRR+tobUx2HWDzhMvyTeVhZuarYtU3aNvRhOlMVDY+2wLowKy
         NEjxThZs7ynvIilgNIbOpZA43+ZA9xL7u/pulb2f9xo+FMsPAj/Fqg==
         -----END RSA PRIVATE KEY-----
-      region: "RegionOne"
-      sshUser: "ubuntu"
-      tenantName: "curso-wcruiser"
-      username: "wcruiser-user"
-      netName: "PUBLIC"
-      password:
-        secret:
-          name: "openstack-password-cyndi"
-          namespace: "default"
-    controlPlaneNodes:
-      isWorker: true
-      openstack:
-        enabled: true
-        quantity: 1
-        flavorName: "m1.xlarge"
-        imageName: "Ubuntu_22_RKE2_k-6.8.0-51"
-        availabilityZone: "nova"
-        securityGroups: "sec-curso"
-        rootVolume: {}
-        userDataFile: ""
-    workerNodes:
-      openstack:
-        enabled: false
-    cniConfig:
-      multusEnabled: true
-      additionalConfig: {}
-
-      bgp: true
-
-      internalAddressInterface: ""
-
-      masquerade: true
-
-      mtu: 1440
-      multusCustomValues: {}
-
-      nodeAddressAutodetection:
-        method: kubernetes
-        value: ""
-
-      podCIDR: "10.42.0.0/16"
-
-      serviceCIDR: "10.43.0.0/16"
-
-      tunnelProtocol: "IPIP"
+      region: RegionOne
+      sshUser: ubuntu
+      tenantName: 'curso-wcruiser'
+      username: 'wcruiser-user'
+    registries:
+      enabled: false
+    sdnController:
+      customValues: { }
+      enabled: false
+      whitesdnSecrets:
+        password: kcatsetiw
+    selfNodeRemediation:
+      enabled: false
+    sriovOperator:
+      customValues: { }
+      enabled: false
     storage:
-      longhorn:
-        enabled: true
-        replicas: "1"
-        customValues: {}
-      openebs:
-        enabled: false
-        replicas: "2"
-        customValues: {}
-
       cephFS:
+        clusterID: aaaaaaaa-bbbb-1111-2222-33333ccccccc
+        customValues: { }
         enabled: false
-
+        enabledHostNetwork: false
+        fsName: ''
+        monitorList: [ ]
+        pool: volumes
+        provisionerReplicaCount: 3
+        reclaimPolicy: Retain
+        userID: admin
+        userKey: AAAAAAAAAAAAAAAAAA/BBBBBBBBBBBBBBBBBBB==
       cephRBD:
+        clusterID: aaaaaaaa-bbbb-1111-2222-33333ccccccc
+        customValues: { }
         enabled: false
-
-    certManager:
-      enabled: true
-      customValues: {}
-
-    ingressNginx:
-      enabled: true
-      customValues: {}
-
-    metallb:
-      enabled: true
-      customValues: {}
-
-    etcdDefrag:
-      enabled: true
-      customValues: {}
-
-    ntp:
-      enabled: true
-      customValues: {}
-
+        enabledHostNetwork: false
+        monitorList: [ ]
+        pool: volumes
+        provisionerReplicaCount: 3
+        reclaimPolicy: Retain
+        userID: admin
+        userKey: AAAAAAAAAAAAAAAAAA/BBBBBBBBBBBBBBBBBBB==
+      longhorn:
+        customValues: { }
+        enabled: true
+        replicas: '2'
+      openebs:
+        customValues: { }
+        enabled: false
+        replicas: '2'
+    workerNodes:
+      annotations: { }
+      baremetal:
+        defaults:
+          bmc:
+            credentialsSecret:
+              name: ''
+              namespace: ''
+            provider: ''
+          finalCommands: ''
+          storage: [ ]
+        nodes: [ ]
+      labels: { }
+      openstack:
+        availabilityZone: 'nova'
+        enabled: true
+        flavorName: 'm1.large'
+        imageName: 'Ubuntu_22_RKE2_k-6.8.0-51'
+        quantity: 1
+        rootVolume: { }
+        securityGroups: sec-curso
+        userDataFile: ''
+      taints: [ ]
     x509CertExporter:
-      enabled: true
-      customValues: {}
+      customValues: { }
+      enabled: false
