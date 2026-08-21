@@ -1,0 +1,136 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: demo-flux
+  namespace: cluster-template
+spec:
+  interval: 5m
+  timeout: 15m
+  chart:
+    spec:
+      chart: ./rke2-rancher-hybrid-calico/1.34.8-wcr.1-rc1
+      sourceRef:
+        kind: GitRepository
+        name: cluster-templates
+        namespace: flux-system
+  targetNamespace: cluster-template
+  values:
+    cluster:
+      name: "cluster-template-userpe11"
+      addonsRepoName: "whitecruiser-apps"
+    openstackDefaults:
+      authUrl: "http://10.102.0.19:5000"
+      domainName: "Default"
+      keypairName: "curso-wcruiser"
+      privateKeyFile: |-
+        -----BEGIN RSA PRIVATE KEY-----
+        MIIEpAIBAAKCAQEA2XuFE6LaMMXBJK4b+BgGgb1VYiQH293MGMtaV1npy+DVmrq2
+        XGcZlF2zsNyTRGyTXOoEoxKOQOnL7O5h4qkxtAJMxzLFTkAf5rtW3wi6c/UocaKM
+        iNtn3b1BXu+b0J8tcsZt/hfpkIh8Axx1fMJpmMdeSNmrz5Hb+jCkzNbv0lGcbdBN
+        bNBy6rt5bZfMXoVEhlmooUorMwSyj/RPnPfU1xU5RrmL9+Sv86L4u9RpHuwme8wb
+        yO/ny627hH+AfaH+bvOW/G/McsnK96X+R10URRnHfeKS60AbhRinKE8KU/WLeRE3
+        W+erCbXUlpgxID4TXDFJGxFwodizYyMUyECoAwIDAQABAoIBACwjkpWypp/hctqz
+        739BuQhZ2dtqPqIT+NlLZFF4MSgswI1/uYU1c46WGeMaUVVAyAPChyBlorNv//Bd
+        TUaIWksTcGu5VSwVfaQBf5cSmWzxY7z0ZZtdFE5/m6Xd8Xy84ad6uFYqmj+4Q5sK
+        CppAhtf4Fp2od+NP0hqMBtaABPplMBGouiGJfMXpoGKPk5yegJ/yOtnuD89QjHES
+        wAvg2YLH76C9eUFF5WpEiW8NnDnWAJwDWJXYFg/0XKPrOKlovdK863AgVDKwYSpN
+        faoBuGkKjc5Ntdu/5vvN1+XpsmvjdGgYPyOe3akSKa7n4+URH+y00koBnGD1Ayjl
+        loeIT2kCgYEA5pMBPe8pObbkSg6dj7zDRtwFdSV8E1zD0bDVGQzOOA35MBwUKRLj
+        0vFr+WBXkqHSM63BFRWqVZRIKHR9fMap+va8CVBa5+IfpVN9TkbxTP52+oA8VnyZ
+        4r1JZTEWpcBO/TnMRWb9th1Fqhx79Vd7gYCYNM4AUoXVsvnKMZaGwN0CgYEA8Xbx
+        F7kr2KdLLdPh7Mr7YThBtX3nlKniCRXMS9GQkxyS4Er6fsTDJS42sf5fE74EGEwN
+        SSfHN/Le1hfh5l7jZVlUv0oLJdSJWn+sgjRIjIonacvUO4TOjHh/VPxxpTIhTiUo
+        g2gHNM30bw0zmlMfvjmB4xwf31XIX73139fPDl8CgYEAxAoPD0KNkZWPqeudST2b
+        5l5hgYWaZbgEgf/QXxkFKKGw0Ze+CGIYNByxyfiA3JobZ3b+6FdgWJzXcRYCL5mV
+        olwv6ddZQzh94YoHywsEVIsyS6/GHV6ZVC/N/GxtLgZA4opGxGdZpYJj3cuUFTgJ
+        OUVFo/fWTFOgKyi4IcsyzT0CgYBS7bKnnyT755jeSGLTXHMxVIzctD0QxbenvyDG
+        +VZZ7/pRpe6aEyGiZ1jJkL8+nIfzgEsf0NWO1Y7KoLEo2XXnnOKKP/fMKk5yEl9A
+        6IvyGJCouSROvLHjdI7mtTyiq7Dckc50MwomjIVijnomil3giwec5E/d+Cw1FZyY
+        IBowqQKBgQCK+A9mUUln0ZNBu4/NndIulYzItiNx/l7p0m+CVVM9qyyhNMZuP2TV
+        +QAeEwDx3jrwHDkoRR+tobUx2HWDzhMvyTeVhZuarYtU3aNvRhOlMVDY+2wLowKy
+        NEjxThZs7ynvIilgNIbOpZA43+ZA9xL7u/pulb2f9xo+FMsPAj/Fqg==
+        -----END RSA PRIVATE KEY-----
+      region: "RegionOne"
+      sshUser: "ubuntu"
+      tenantName: "curso-wcruiser"
+      username: "wcruiser-user"
+      netName: "PUBLIC"
+      password:
+        secret:
+          name: "openstack-password-cyndi"
+          namespace: "default"
+    controlPlaneNodes:
+      isWorker: true
+      openstack:
+        enabled: true
+        quantity: 1
+        flavorName: "m1.xlarge"
+        imageName: "Ubuntu_22_RKE2_k-6.8.0-51"
+        availabilityZone: "nova"
+        securityGroups: "sec-curso"
+        rootVolume: {}
+        userDataFile: ""
+    workerNodes:
+      openstack:
+        enabled: false
+    cniConfig:
+      multusEnabled: true
+      additionalConfig: {}
+
+      bgp: true
+
+      internalAddressInterface: ""
+
+      masquerade: true
+
+      mtu: 1440
+      multusCustomValues: {}
+
+      nodeAddressAutodetection:
+        method: kubernetes
+        value: ""
+
+      podCIDR: "10.42.0.0/16"
+
+      serviceCIDR: "10.43.0.0/16"
+
+      tunnelProtocol: "IPIP"
+    storage:
+      longhorn:
+        enabled: true
+        replicas: "1"
+        customValues: {}
+      openebs:
+        enabled: false
+        replicas: "2"
+        customValues: {}
+
+      cephFS:
+        enabled: false
+
+      cephRBD:
+        enabled: false
+
+    certManager:
+      enabled: true
+      customValues: {}
+
+    ingressNginx:
+      enabled: true
+      customValues: {}
+
+    metallb:
+      enabled: true
+      customValues: {}
+
+    etcdDefrag:
+      enabled: true
+      customValues: {}
+
+    ntp:
+      enabled: true
+      customValues: {}
+
+    x509CertExporter:
+      enabled: true
+      customValues: {}
